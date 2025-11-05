@@ -1,0 +1,37 @@
+<!--Ilya Zeldner-->
+<!--change in document-->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document Manipulation Example</title>
+    </head>
+    <body>
+        <h1 id="header">Hello, World!</h1>
+        <p class="text">This is a paragraph.</p>
+        <button onclick="changeHeader()">Change Header</button>
+        <button onclick="changeParagraph()">Change Paragraph</button>
+        <button onclick="addElement()">Add Element</button>
+
+        <script>
+            // Change the header text
+            function changeHeader() {
+                document.getElementById('header').innerText = 'Header Changed!';
+            }
+
+            // Change the paragraph text
+            function changeParagraph() {
+                document.querySelector('.text').innerText = 'Paragraph Changed!';
+            }
+
+            // Add a new element to the body
+            function addElement() {
+                const newElement = document.createElement('div');
+                newElement.innerText = 'New Element Added!';
+                document.body.appendChild(newElement);
+            }
+        </script>
+    </body>
+</html>

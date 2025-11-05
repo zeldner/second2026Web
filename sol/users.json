@@ -1,0 +1,26 @@
+[
+    {
+      "username": "user1",
+      "email": "user1@example.com",
+      "password": "password1",
+      "dateOfBirth": "1990-01-01"
+    },
+    {
+      "username": "user4",
+      "email": "user2@example.com",
+      "password": "password2",
+      "dateOfBirth": "1995-05-15"
+    },
+    {
+      "username": "user5",
+      "email": "user3@example.com",
+      "password": "password3",
+      "dateOfBirth": "1995-05-16"
+    },
+    {
+      "username": "testuser56",
+      "email": "test@test.com",
+      "password": "testpassword",
+      "dateOfBirth": "2000-01-01"
+    }
+]

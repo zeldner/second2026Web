@@ -1,0 +1,86 @@
+<!--Ilya Zeldner-->
+<!--change in document with json and local storage-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON and Local Storage Example</title>
+</head>
+<body>
+    <h1>JSON and Local Storage Example</h1>
+    <textarea id="jsonInput" rows="10" cols="50" placeholder="Enter JSON here..."></textarea>
+    <br>
+    <button onclick="saveToLocalStorage()">Save to Local Storage</button>
+    <button onclick="readFromLocalStorage()">Read from Local Storage</button>
+    <button onclick="saveToFile()">Save to File</button>
+    <button onclick="readFromFile()">Read from File</button>
+    <pre id="output"></pre>
+    <script>
+        /* 
+            *Understanding Local Storage
+                * Local storage is a feature of web browsers. 
+                * It allows websites to store data within the user's browser, on their local computer.
+                * The location where this data is stored is managed by the browser itself.
+                * It's not intended for direct user access in the same way you'd browse a normal folder.
+            *Finding Local Storage Data (Approximate Locations):
+                *For example :  Chrome (Windows, macOS, Linux):
+                    * Chrome stores local storage data in a SQLite database file. 
+                    * The exact location can vary slightly depending on your operating system and Chrome version.
+                    * It's usually within your Chrome user profile directory.
+                    * Finding and reading these files directly requires specialized tools for viewing SQLite databases.
+                    * Therefore, directly finding it to read the data is not easy or recommended.
+        */
+        function saveToLocalStorage() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            localStorage.setItem('jsonData', jsonInput);
+            alert('Data saved to local storage');
+        }
+        function readFromLocalStorage() {
+            const jsonData = localStorage.getItem('jsonData');
+            document.getElementById('output').textContent = jsonData ? jsonData : 'No data found in local storage';
+        }
+    /*  
+        * Saving a File (Client-Side):
+            * The saveToFile() function in this code does not directly write a file to the server's file system or to the same directory as the HTML file.
+            * Instead, it uses the browser's capabilities to create a downloadable file on the client's (user's) computer.
+            * The Blob object and the <a> element with the download attribute trigger a file download dialog, allowing the user to choose where to save the file.
+            * Therefore, the browser handles the file creation and saving on the user's local machine, not the server. 
+            * This is why it works.
+        * Direct Server-Side File Writing (Generally Restricted):
+            * We "can't write directly from an HTML page to a JSON file", and its refers to server-side file writing.
+            * For security reasons, browsers typically prevent JavaScript running in a web page from directly writing files to the server's file system.
+            * To write files on the server, we would need to use server-side programming languages (like Node.js, Python, PHP, etc.) and server-side code. 
+            * That code would then write the file to the server's file system.
+            * In this example , When a user downloads a file using the save to file function, 
+            * they are downloading it to their computer, not the server the HTML page is hosted on.
+            * In summary, this code works , because it facilitates client-side file downloads, not direct server-side file writing.
+        */
+        function saveToFile() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            const blob = new Blob([jsonInput], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index2data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        function readFromFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            input.onchange = event => {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.onload = () => {
+                    document.getElementById('output').textContent = reader.result;
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+    </script>
+</body>
+</html>
+
