@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern File Handling: Frontend vs Backend</title>
+    <!-- Tailwind Play CDN for immediate classroom demo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6 md:p-10 font-sans">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 pb-4 border-b border-slate-800 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-white">File Systems in Web Development</h1>
+                <p class="text-sm text-slate-400 mt-1">Comparing Browser Security Sandbox vs. Node.js Direct OS Access</p>
+            </div>
+            <span class="text-xs font-semibold px-3 py-1 bg-indigo-950 text-indigo-300 border border-indigo-800 rounded-full">
+                Tutorial 2
+            </span>
+        </header>
+
+        <!-- Comparison Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- ========================================== -->
+            <!-- 1. FRONTEND: Browser Sandbox -->
+            <!-- ========================================== -->
+            <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-6 flex flex-col justify-between shadow-xl">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg font-bold text-sky-400 font-mono">1. Frontend (Browser)</span>
+                            <span class="text-[10px] bg-sky-950 text-sky-300 border border-sky-800 px-2 py-0.5 rounded-full font-semibold">Sandbox Security</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                        Browsers cannot directly access OS file paths. Users must explicitly upload files, and exports trigger a user download.
+                    </p>
+
+                    <!-- A. Modern Browser File Reading -->
+                    <div class="mb-6 p-4 bg-slate-950/70 border border-slate-800 rounded-lg">
+                        <span class="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-2">A. Read File (Modern file.text())</span>
+                        <pre class="bg-slate-950 p-2 rounded text-[11px] font-mono text-slate-400 border border-slate-800 mb-3">
+const [file] = inputElement.files;
+const text = await file.text(); // Native Promise (No FileReader callback!)</pre>
+                        
+                        <div class="flex items-center gap-3">
+                            <label class="cursor-pointer px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 rounded text-xs font-medium transition">
+                                Choose Text/JSON File
+                                <input type="file" id="browser-file-input" class="hidden" accept=".txt,.json,.js">
+                            </label>
+                            <span id="browser-file-name" class="text-xs text-slate-500 italic truncate max-w-[180px]">No file chosen</span>
+                        </div>
+                        <div id="browser-read-output" class="mt-3 p-2 bg-slate-950 rounded text-xs font-mono text-slate-400 border border-slate-900 min-h-[40px] max-h-[80px] overflow-y-auto">
+                            File content will appear here...
+                        </div>
+                    </div>
+
+                    <!-- B. Modern Browser File Writing (Blob Download) -->
+                    <div class="p-4 bg-slate-950/70 border border-slate-800 rounded-lg">
+                        <span class="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-2">B. Write / Save File (Blob Export)</span>
+                        <pre class="bg-slate-950 p-2 rounded text-[11px] font-mono text-slate-400 border border-slate-800 mb-3">
+const blob = new Blob([content], { type: "application/json" });
+const url = URL.createObjectURL(blob); // Temporary Virtual Link</pre>
+                        
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="text-xs text-slate-400 font-mono">exportData = { id: 101, status: "Active" }</span>
+                            <button id="btn-browser-save" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                                Export & Download JSON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-700/50 text-[11px] text-slate-500 font-mono">
+                    Security status: Blocked from direct disk write. Downloads require user consent.
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 2. BACKEND: Node.js Direct FileSystem -->
+            <!-- ========================================== -->
+            <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-6 flex flex-col justify-between shadow-xl">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg font-bold text-emerald-400 font-mono">2. Backend (Node.js)</span>
+                            <span class="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded-full font-semibold">Direct OS Access</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                        Server scripts have full disk privileges. Modern standard uses <code class="text-emerald-400">node:fs/promises</code> with <code class="text-emerald-400">async/await</code>.
+                    </p>
+
+                    <!-- Modern Node.js Code Display -->
+                    <div class="p-4 bg-slate-950/70 border border-slate-800 rounded-lg mb-4">
+                        <span class="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-2">Modern Server Code Pattern</span>
+                        <pre class="bg-slate-950 p-2.5 rounded text-[11px] font-mono text-slate-300 border border-slate-800 leading-relaxed overflow-x-auto">
+const fs = require('node:fs/promises');
+const path = require('node:path');
+
+// 1. Direct write to physical server disk
+await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+
+// 2. Direct read from disk without user prompt
+const raw = await fs.readFile(filePath, 'utf8');
+const data = JSON.parse(raw);</pre>
+                    </div>
+
+                    <!-- Server Pipeline Trace Simulation -->
+                    <div class="p-4 bg-slate-950/70 border border-slate-800 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Simulated Server Pipeline</span>
+                            <span id="node-status-badge" class="text-[10px] text-slate-500 font-mono">Idle</span>
+                        </div>
+                        <div id="node-trace-log" class="p-3 bg-slate-950 rounded text-xs font-mono text-slate-400 border border-slate-900 space-y-1 min-h-[96px]">
+                            <span class="text-slate-600 italic">Click button to trigger server file pipeline...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-700/50 flex items-center justify-between">
+                    <span class="text-[11px] text-slate-500 font-mono">Module: node:fs/promises</span>
+                    <button id="btn-node-simulate" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                        Execute Server Pipeline
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Playground Script -->
+    <script>
+        // ========================================================
+        // 1. FRONTEND: File Reading via file.text()
+        // ========================================================
+        const fileInput = document.getElementById("browser-file-input");
+        const fileNameDisplay = document.getElementById("browser-file-name");
+        const readOutput = document.getElementById("browser-read-output");
+
+        fileInput.addEventListener("change", async (e) => {
+            const [selectedFile] = e.target.files;
+            if (!selectedFile) return;
+
+            fileNameDisplay.textContent = selectedFile.name;
+
+            try {
+                // Modern Web API: file.text() returns a Promise with text content
+                const content = await selectedFile.text();
+                readOutput.innerHTML = `<span class="text-emerald-400 font-bold">[Success]:</span> <span class="text-slate-300">${content.slice(0, 150)}${content.length > 150 ? '...' : ''}</span>`;
+            } catch (err) {
+                readOutput.innerHTML = `<span class="text-rose-400 font-bold">Error reading file:</span> ${err.message}`;
+            }
+        });
+
+        // ========================================================
+        // 1. FRONTEND: File Writing via Blob Download
+        // ========================================================
+        document.getElementById("btn-browser-save").addEventListener("click", () => {
+            const clientData = {
+                id: 101,
+                name: "Web Tutorial 2",
+                timestamp: new Date().toISOString(),
+                status: "Active"
+            };
+
+            // Convert JS Object to JSON formatted string
+            const jsonText = JSON.stringify(clientData, null, 2);
+
+            // 1. Create a binary Blob in browser memory
+            const blob = new Blob([jsonText], { type: "application/json" });
+
+            // 2. Create a temporary virtual URL pointing to the Blob
+            const downloadUrl = URL.createObjectURL(blob);
+
+            // 3. Create a temporary invisible link element to trigger the download
+            const tempLink = document.createElement("a");
+            tempLink.href = downloadUrl;
+            tempLink.download = "browser-export.json";
+            document.body.appendChild(tempLink);
+            tempLink.click();
+
+            // 4. Cleanup memory
+            document.body.removeChild(tempLink);
+            URL.revokeObjectURL(downloadUrl);
+        });
+
+        // ========================================================
+        // 2. BACKEND: Simulating Server File Pipeline Trace
+        // ========================================================
+        const traceLog = document.getElementById("node-trace-log");
+        const statusBadge = document.getElementById("node-status-badge");
+        const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        document.getElementById("btn-node-simulate").addEventListener("click", async () => {
+            traceLog.innerHTML = "";
+            statusBadge.textContent = "Running...";
+            statusBadge.className = "text-[10px] text-amber-400 font-mono animate-pulse";
+
+            // Step 1: Serialize and write to disk
+            traceLog.innerHTML += `<div class="text-slate-400">[1] Preparing payload: { user: "Ilya", role: "Lecturer" }</div>`;
+            await wait(500);
+
+            traceLog.innerHTML += `<div class="text-emerald-400">[2] await fs.writeFile('/var/data/user.json') -> Written to OS disk!</div>`;
+            await wait(600);
+
+            // Step 2: Read raw string from disk
+            traceLog.innerHTML += `<div class="text-sky-400">[3] await fs.readFile('/var/data/user.json', 'utf8') -> String fetched</div>`;
+            await wait(500);
+
+            // Step 3: Parse JSON back to JS Object
+            traceLog.innerHTML += `<div class="text-purple-400 font-bold">[4] JSON.parse() successful -> In-memory Object ready!</div>`;
+            
+            statusBadge.textContent = "Completed";
+            statusBadge.className = "text-[10px] text-emerald-400 font-mono";
+        });
+    </script>
+</body>
+</html>

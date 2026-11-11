@@ -1,14 +1,19 @@
 Ilya Zeldner
-tutorial tailwind
-https://tailwindcss.com/
-    npm cache clean --force
-    npm install tailwindcss @tailwindcss/cli
-    in src/input.css : @import "tailwindcss";
-    npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch 
+tutorial tailwind : 
 
-    in package.json : 
-          "scripts": {
-            "build": "tailwindcss -i ./src/input.css -o ./src/output.css --watch"
-            },
 
+# 1. Initialize project with package.json
+npm init -y
+
+# 2. Install Tailwind v4 and the official CLI
+npm install tailwindcss @tailwindcss/cli
+
+src/input.css : 
+  @import "tailwindcss";
+
+package.json : 
+  "scripts": {
+  "dev": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
+  "build": "tailwindcss -i ./src/input.css -o ./src/output.css --minify"
+  }
 

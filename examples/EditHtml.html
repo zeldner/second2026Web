@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern DOM Manipulation - Tutorial 2</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-8 font-sans">
+
+    <div class="max-w-3xl mx-auto bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+        <!-- Header -->
+        <header class="mb-6 pb-4 border-b border-slate-700">
+            <h1 id="main-header" class="text-2xl font-bold text-white transition-colors duration-300">
+                Hello, World!
+            </h1>
+            <p id="main-paragraph" class="text-slate-400 text-sm mt-1">
+                This is a sample paragraph waiting to be manipulated by JavaScript.
+            </p>
+        </header>
+
+        <!-- Action Controls -->
+        <div class="flex flex-wrap gap-3 mb-8">
+            <button id="btn-change-text" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                Change Content
+            </button>
+            <button id="btn-toggle-theme" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600 rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                Toggle Style (classList)
+            </button>
+            <button id="btn-add-item" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                Add Dynamic Card
+            </button>
+        </div>
+
+        <!-- Dynamic Content Target Container -->
+        <div>
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+                Dynamically Appended Elements:
+            </h2>
+            <div id="cards-container" class="space-y-2">
+                <!-- Dynamically generated items will be appended here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Logic Script (No inline handlers) -->
+    <script>
+        // 1. Select elements using const (immutable reference)
+        const header = document.querySelector("#main-header");
+        const paragraph = document.querySelector("#main-paragraph");
+        const cardsContainer = document.querySelector("#cards-container");
+
+        const btnChangeText = document.querySelector("#btn-change-text");
+        const btnToggleTheme = document.querySelector("#btn-toggle-theme");
+        const btnAddItem = document.querySelector("#btn-add-item");
+
+        let itemCounter = 0; // State variable
+
+        // 2. Change text content safely using textContent
+        btnChangeText.addEventListener("click", () => {
+            header.textContent = "Title Updated via JavaScript!";
+            paragraph.textContent = "Text content changed dynamically using modern DOM selection.";
+        });
+
+        // 3. Style manipulation using classList.toggle (Tailwind utilities)
+        btnToggleTheme.addEventListener("click", () => {
+            header.classList.toggle("text-indigo-400");
+            header.classList.toggle("translate-x-2");
+        });
+
+        // 4. Dynamic element creation and structured insertion
+        btnAddItem.addEventListener("click", () => {
+            itemCounter++;
+
+            // Create container element
+            const newCard = document.createElement("div");
+            newCard.className = "flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-lg text-sm animate-fade-in";
+
+            // Populate content with template literals
+            newCard.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span class="text-slate-200 font-mono text-xs">Dynamic Item #${itemCounter}</span>
+                </div>
+                <button class="delete-btn text-xs text-rose-400 hover:text-rose-300 font-medium transition">
+                    Remove
+                </button>
+            `;
+
+            // Attach inline delete listener to self-destruct
+            newCard.querySelector(".delete-btn").addEventListener("click", () => {
+                newCard.remove();
+            });
+
+            // Append to dedicated container instead of document.body
+            cardsContainer.appendChild(newCard);
+        });
+    </script>
+</body>
+</html>

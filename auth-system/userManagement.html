@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Admin Console</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- External Logic Script -->
+    <script src="./userManagement.js" defer></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6 md:p-10 font-sans">
+
+    <!-- Container is hidden by default to prevent UI flashing before authorization -->
+    <div id="admin-content" class="hidden max-w-5xl mx-auto">
+        <!-- Dashboard Header -->
+        <header class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-8 border-b border-slate-800 gap-4">
+            <div>
+                <h1 id="welcome-message" class="text-3xl font-bold text-white tracking-tight">Welcome, User</h1>
+                <p class="text-xs text-slate-400 mt-1">Administrative Control Panel - Registered Accounts Directory</p>
+            </div>
+            
+            <button id="btn-logout" 
+                class="px-4 py-2 bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-600/40 rounded-lg text-xs font-semibold transition active:scale-95 self-start sm:self-auto">
+                Log Out
+            </button>
+        </header>
+
+        <!-- User Directory Table Container -->
+        <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-xl">
+            <div class="px-6 py-4 border-b border-slate-700 bg-slate-800/50">
+                <h2 class="text-sm font-semibold text-slate-200">System Users</h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-950/70 border-b border-slate-700 text-xs text-slate-400 uppercase font-mono tracking-wider">
+                            <th class="py-3 px-6">ID</th>
+                            <th class="py-3 px-6">Username</th>
+                            <th class="py-3 px-6">Email</th>
+                            <th class="py-3 px-6">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-rows" class="divide-y divide-slate-700/60 text-sm">
+                        <!-- Populated dynamically via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

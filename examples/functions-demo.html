@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Function Types - Interactive Benchmark</title>
+    <!-- Tailwind Play CDN for immediate classroom execution -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6 md:p-10 font-sans">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="mb-6 pb-4 border-b border-slate-800">
+            <h1 class="text-2xl font-bold tracking-tight text-white">JavaScript Function Types</h1>
+            <p class="text-sm text-slate-400 mt-1">Comparing syntax, execution trace, and behavior with inputs: a = 10, b = 5</p>
+        </header>
+
+        <!-- Function Comparison Cards -->
+        <div class="space-y-4">
+
+            <!-- 1. Function Declaration -->
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
+                <div class="space-y-1.5 flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-emerald-400 font-mono text-sm">1. Declaration</span>
+                        <span class="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-1.5 py-0.5 rounded">Hoisted</span>
+                    </div>
+                    <pre class="bg-slate-950 p-2.5 rounded text-xs font-mono text-slate-300 border border-slate-800 leading-relaxed">
+// Can be invoked BEFORE definition line
+const res = add(10, 5); 
+
+function add(a, b) {
+    return a + b;
+}</pre>
+                </div>
+                <div class="flex items-center gap-3 self-end md:self-auto">
+                    <div id="out-add" class="font-mono text-xs text-slate-400 min-w-[140px] text-right">Result: --</div>
+                    <button id="btn-add" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition active:scale-95">
+                        Run add(10, 5)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Function Expression -->
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
+                <div class="space-y-1.5 flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-sky-400 font-mono text-sm">2. Expression</span>
+                        <span class="text-[10px] bg-sky-950 text-sky-300 border border-sky-800 px-1.5 py-0.5 rounded">Stored in Variable</span>
+                    </div>
+                    <pre class="bg-slate-950 p-2.5 rounded text-xs font-mono text-slate-300 border border-slate-800 leading-relaxed">
+// Cannot be called before initialization (Not hoisted)
+const subtract = function(a, b) {
+    return a - b;
+};</pre>
+                </div>
+                <div class="flex items-center gap-3 self-end md:self-auto">
+                    <div id="out-subtract" class="font-mono text-xs text-slate-400 min-w-[140px] text-right">Result: --</div>
+                    <button id="btn-subtract" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold transition active:scale-95">
+                        Run subtract(10, 5)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. Arrow Function -->
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
+                <div class="space-y-1.5 flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-indigo-400 font-mono text-sm">3. Arrow Function</span>
+                        <span class="text-[10px] bg-indigo-950 text-indigo-300 border border-indigo-800 px-1.5 py-0.5 rounded">Implicit Return</span>
+                    </div>
+                    <pre class="bg-slate-950 p-2.5 rounded text-xs font-mono text-slate-300 border border-slate-800 leading-relaxed">
+// One-liner with implicit return (no braces, no 'return' keyword)
+const multiply = (a, b) => a * b;</pre>
+                </div>
+                <div class="flex items-center gap-3 self-end md:self-auto">
+                    <div id="out-multiply" class="font-mono text-xs text-slate-400 min-w-[140px] text-right">Result: --</div>
+                    <button id="btn-multiply" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition active:scale-95">
+                        Run multiply(10, 5)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. Anonymous Function (Passed as Callback) -->
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
+                <div class="space-y-1.5 flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-amber-400 font-mono text-sm">4. Anonymous Callback</span>
+                        <span class="text-[10px] bg-amber-950 text-amber-300 border border-amber-800 px-1.5 py-0.5 rounded">Parameter Binding</span>
+                    </div>
+                    <pre class="bg-slate-950 p-2.5 rounded text-xs font-mono text-slate-300 border border-slate-800 leading-relaxed">
+// Host function binds arguments: num1 -> x, num2 -> y
+function calculate(num1, num2, callback) { return callback(num1, num2); }
+
+// Calling with an anonymous inline function:
+calculate(10, 5, function(x, y) { return (x + y) * 2; });</pre>
+                </div>
+                <div class="flex items-center gap-3 self-end md:self-auto">
+                    <div id="out-callback" class="font-mono text-xs text-slate-400 min-w-[160px] text-right">Result: --</div>
+                    <button id="btn-callback" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-semibold transition active:scale-95">
+                        Run Callback
+                    </button>
+                </div>
+            </div>
+
+            <!-- 5. Async Function vs Sleep -->
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
+                <div class="space-y-1.5 flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-purple-400 font-mono text-sm">5. Async Function</span>
+                        <span class="text-[10px] bg-purple-950 text-purple-300 border border-purple-800 px-1.5 py-0.5 rounded">Non-Blocking Promise</span>
+                        <!-- Live visual heartbeat indicator -->
+                        <span class="flex items-center gap-1.5 text-[11px] text-slate-400 font-mono ml-2">
+                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            UI Alive
+                        </span>
+                    </div>
+                    <pre class="bg-slate-950 p-2.5 rounded text-xs font-mono text-slate-300 border border-slate-800 leading-relaxed">
+async function fetchSumAsync(x, y) {
+    await wait(2000); // Suspends this function ONLY
+    return x + y;
+}
+// UI thread & clickers stay completely responsive!</pre>
+                </div>
+
+                <!-- Controls & Local Responsive Tester -->
+                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3 self-end md:self-auto">
+                    <div id="out-async" class="font-mono text-xs text-slate-400 min-w-[150px] text-right">Status: Idle</div>
+                    
+                    <div class="flex items-center gap-2">
+                        <!-- Primary async trigger -->
+                        <button id="btn-async" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                            Run Async (2s)
+                        </button>
+
+                        <!-- Local spam-clicker placed right next to async button -->
+                        <button id="btn-async-spam" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600 rounded-lg text-xs font-mono transition active:scale-90">
+                            Spam Click: <span id="spam-counter" class="text-emerald-400 font-bold">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        // Shared inputs across all tests
+        const a = 10;
+        const b = 5;
+
+        // ========================================================
+        // 1. Function Declaration (Hoisting Demo)
+        // ========================================================
+        document.getElementById("btn-add").addEventListener("click", () => {
+            // Invoking function before its declaration line in this block
+            const res = add(a, b);
+            document.getElementById("out-add").innerHTML = `
+                <span class="text-emerald-400 font-bold">${a} + ${b} = ${res}</span>
+            `;
+
+            function add(x, y) {
+                return x + y;
+            }
+        });
+
+        // ========================================================
+        // 2. Function Expression (Variable Storage)
+        // ========================================================
+        const subtract = function(x, y) {
+            return x - y;
+        };
+
+        document.getElementById("btn-subtract").addEventListener("click", () => {
+            const res = subtract(a, b);
+            document.getElementById("out-subtract").innerHTML = `
+                <span class="text-sky-400 font-bold">${a} - ${b} = ${res}</span>
+            `;
+        });
+
+        // ========================================================
+        // 3. Arrow Function (Concise Syntax)
+        // ========================================================
+        const multiply = (x, y) => x * y;
+
+        document.getElementById("btn-multiply").addEventListener("click", () => {
+            const res = multiply(a, b);
+            document.getElementById("out-multiply").innerHTML = `
+                <span class="text-indigo-400 font-bold">${a} * ${b} = ${res}</span>
+            `;
+        });
+
+        // ========================================================
+        // 4. Anonymous Function (Argument-to-Parameter Binding)
+        // ========================================================
+        function calculate(num1, num2, callback) {
+            // Explicit call: maps num1 to 1st param (x), num2 to 2nd param (y)
+            return callback(num1, num2);
+        }
+
+        document.getElementById("btn-callback").addEventListener("click", () => {
+            // Passing an anonymous function directly into the call
+            const res = calculate(a, b, function(x, y) {
+                return (x + y) * 2; // (10 + 5) * 2 = 30
+            });
+
+            document.getElementById("out-callback").innerHTML = `
+                <span class="text-amber-400 font-bold">(${a} + ${b}) * 2 = ${res}</span>
+            `;
+        });
+
+        // ========================================================
+        // 5. Async / Await (Execution Trace vs Blocking Sleep)
+        // ========================================================
+        // Local spam clicker logic
+        let spamClicks = 0;
+        document.getElementById("btn-async-spam").addEventListener("click", () => {
+            spamClicks++;
+            document.getElementById("spam-counter").textContent = spamClicks;
+        });
+
+        const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        async function fetchSumAsync(x, y) {
+            await wait(2000); // Suspends execution of this function only
+            return x + y;
+        }
+
+        document.getElementById("btn-async").addEventListener("click", async (e) => {
+            const out = document.getElementById("out-async");
+            const btn = e.currentTarget;
+
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+
+            out.innerHTML = `<span class="text-purple-300 font-mono animate-pulse">Waiting 2s... Spam click!</span>`;
+
+            const result = await fetchSumAsync(a, b);
+
+            out.innerHTML = `
+                <span class="text-purple-400 font-bold font-mono">${a} + ${b} = ${result}</span>
+            `;
+
+            btn.disabled = false;
+            btn.classList.remove("opacity-50", "cursor-not-allowed");
+        });
+    </script>
+</body>
+</html>

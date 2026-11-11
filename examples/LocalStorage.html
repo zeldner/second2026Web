@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON, Storage & Files - Tutorial 2</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-8 font-sans">
+
+    <div class="max-w-4xl mx-auto bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+        
+        <!-- Header & Status Toast -->
+        <header class="mb-6 pb-4 border-b border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+                <h1 class="text-2xl font-bold text-white">JSON, Storage & Client Files</h1>
+                <p class="text-xs text-slate-400 mt-1">Browser Sandbox: Local Storage serialization and virtual Blob downloads</p>
+            </div>
+            <!-- Notification Badge (Replaces blocking alert()) -->
+            <div id="status-toast" class="hidden px-3 py-1.5 rounded-lg text-xs font-medium font-mono"></div>
+        </header>
+
+        <!-- JSON Input Area -->
+        <div class="mb-4">
+            <label for="json-input" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                JSON Data Editor:
+            </label>
+            <textarea id="json-input" rows="6" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 font-mono text-xs text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" placeholder='{"id": 1, "name": "Alice", "role": "Engineer"}'></textarea>
+        </div>
+
+        <!-- Toolbar Buttons -->
+        <div class="flex flex-wrap items-center gap-2 mb-6">
+            <button id="btn-save-storage" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                Save to LocalStorage
+            </button>
+            <button id="btn-load-storage" class="px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600 rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                Read from LocalStorage
+            </button>
+            <button id="btn-save-file" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                Export to JSON File
+            </button>
+
+            <!-- Hidden File Input triggered by button -->
+            <label class="cursor-pointer px-3.5 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm">
+                Import from JSON File
+                <input type="file" id="file-input" class="hidden" accept=".json,.txt">
+            </label>
+        </div>
+
+        <!-- Output Console Display -->
+        <div>
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Parsed Output / Status:</h2>
+            <pre id="output-console" class="bg-slate-950 border border-slate-900 rounded-xl p-4 font-mono text-xs text-slate-400 min-h-[90px] overflow-x-auto leading-relaxed">No operations performed yet.</pre>
+        </div>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        const jsonInput = document.querySelector("#json-input");
+        const outputConsole = document.querySelector("#output-console");
+        const statusToast = document.querySelector("#status-toast");
+
+        // Helper: shows subtle non-blocking notification badge
+        function notify(message, isError = false) {
+            statusToast.textContent = message;
+            statusToast.className = isError 
+                ? "px-3 py-1.5 rounded-lg text-xs font-medium font-mono bg-rose-950 text-rose-300 border border-rose-800"
+                : "px-3 py-1.5 rounded-lg text-xs font-medium font-mono bg-emerald-950 text-emerald-300 border border-emerald-800";
+            
+            setTimeout(() => {
+                statusToast.className = "hidden";
+            }, 3000);
+        }
+
+        // ==========================================
+        // 1. Local Storage: JSON String Serialization
+        // ==========================================
+        document.querySelector("#btn-save-storage").addEventListener("click", () => {
+            const rawValue = jsonInput.value.trim();
+            if (!rawValue) {
+                notify("Textarea is empty!", true);
+                return;
+            }
+
+            try {
+                // Validate valid JSON format before saving
+                JSON.parse(rawValue);
+                
+                // LocalStorage only stores strings
+                localStorage.setItem("appData", rawValue);
+                notify("Saved to LocalStorage successfully");
+            } catch (err) {
+                notify("Invalid JSON syntax: " + err.message, true);
+            }
+        });
+
+        document.querySelector("#btn-load-storage").addEventListener("click", () => {
+            const rawStored = localStorage.getItem("appData");
+            if (!rawStored) {
+                outputConsole.textContent = "No data found in LocalStorage.";
+                notify("Storage empty", true);
+                return;
+            }
+
+            // Parse and format with 2 spaces for display
+            const parsedObj = JSON.parse(rawStored);
+            outputConsole.textContent = JSON.stringify(parsedObj, null, 2);
+            notify("Data loaded from LocalStorage");
+        });
+
+        // ==========================================
+        // 2. Client-Side File Export (Blob + Virtual Link)
+        // ==========================================
+        document.querySelector("#btn-save-file").addEventListener("click", () => {
+            const content = jsonInput.value.trim();
+            if (!content) {
+                notify("Nothing to export!", true);
+                return;
+            }
+
+            // 1. Create a binary Blob in browser memory
+            const blob = new Blob([content], { type: "application/json" });
+
+            // 2. Create virtual URL pointing to the Blob
+            const downloadUrl = URL.createObjectURL(blob);
+
+            // 3. Create invisible link to trigger browser download dialog
+            const tempLink = document.createElement("a");
+            tempLink.href = downloadUrl;
+            tempLink.download = "data-export.json";
+            document.body.appendChild(tempLink);
+            tempLink.click();
+
+            // 4. Cleanup allocated memory
+            document.body.removeChild(tempLink);
+            URL.revokeObjectURL(downloadUrl);
+
+            notify("File export started");
+        });
+
+        // ==========================================
+        // 3. Modern Client-Side File Import (file.text())
+        // ==========================================
+        document.querySelector("#file-input").addEventListener("change", async (e) => {
+            const [selectedFile] = e.target.files;
+            if (!selectedFile) return;
+
+            try {
+                // Modern Promise-based API (replaces legacy FileReader callbacks)
+                const text = await selectedFile.text();
+                
+                // Parse and update view
+                const parsed = JSON.parse(text);
+                jsonInput.value = JSON.stringify(parsed, null, 2);
+                outputConsole.textContent = `Successfully imported file: ${selectedFile.name}\nSize: ${selectedFile.size} bytes`;
+                notify(`Imported ${selectedFile.name}`);
+            } catch (err) {
+                outputConsole.textContent = "Error importing file: " + err.message;
+                notify("Failed to parse file", true);
+            }
+        });
+    </script>
+</body>
+</html>

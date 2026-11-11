@@ -1,0 +1,250 @@
+<!-- Ilya Zeldner -->
+ <!-- JS Variables Sandbox - VAR LET CONST  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Variables Sandbox - VAR LET CONST</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-8 font-sans">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 border-b border-slate-800 pb-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight text-white">JavaScript Variables Sandbox</h1>
+                <p class="text-slate-400 text-sm mt-1">Live execution trace: Scope, Hoisting, and Reassignment</p>
+            </div>
+            <button id="run-all-btn" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition active:scale-95 shadow-lg shadow-indigo-500/20">
+                Run All Tests
+            </button>
+        </header>
+
+        <!-- 3-Column Sandbox Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- 1. VAR Panel -->
+            <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-5 flex flex-col justify-between shadow-lg">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xl font-bold text-amber-400 font-mono">var</span>
+                        <span class="text-xs bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800">Function Scope</span>
+                    </div>
+
+                    <!-- Code Preview -->
+                    <pre class="bg-slate-950 p-3 rounded-lg text-xs font-mono text-slate-300 border border-slate-800 overflow-x-auto leading-relaxed">
+var x = 1;
+if (true) {
+  var x = 2; // Overwrites outer x!
+}
+if (false) {
+  var y = 3; // Hoisted as undefined
+}
+x = "test";  // Allowed</pre>
+
+                    <!-- Terminal Output Box -->
+                    <div class="mt-4">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Live Execution Log:</span>
+                        <div id="var-console" class="mt-1 bg-slate-950 border border-slate-800 rounded-lg p-3 font-mono text-xs space-y-1 min-h-[140px]">
+                            <span class="text-slate-600 italic">Ready to execute...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="run-var-btn" class="mt-4 w-full py-2 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-600/40 font-medium rounded-lg transition">
+                    Run VAR Test
+                </button>
+            </div>
+
+            <!-- 2. LET Panel -->
+            <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-5 flex flex-col justify-between shadow-lg">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xl font-bold text-sky-400 font-mono">let</span>
+                        <span class="text-xs bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Block Scope</span>
+                    </div>
+
+                    <!-- Code Preview -->
+                    <pre class="bg-slate-950 p-3 rounded-lg text-xs font-mono text-slate-300 border border-slate-800 overflow-x-auto leading-relaxed">
+let y = 1;
+if (true) {
+  let y = 2; // Isolated to block
+}
+if (false) {
+  let z = 3; // Block-scoped
+}
+// access z -> ReferenceError
+y = "test";  // Allowed</pre>
+
+                    <!-- Terminal Output Box -->
+                    <div class="mt-4">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Live Execution Log:</span>
+                        <div id="let-console" class="mt-1 bg-slate-950 border border-slate-800 rounded-lg p-3 font-mono text-xs space-y-1 min-h-[140px]">
+                            <span class="text-slate-600 italic">Ready to execute...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="run-let-btn" class="mt-4 w-full py-2 bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-600/40 font-medium rounded-lg transition">
+                    Run LET Test
+                </button>
+            </div>
+
+            <!-- 3. CONST Panel -->
+            <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-5 flex flex-col justify-between shadow-lg">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xl font-bold text-emerald-400 font-mono">const</span>
+                        <span class="text-xs bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800">Immutable Binding</span>
+                    </div>
+
+                    <!-- Code Preview -->
+                    <pre class="bg-slate-950 p-3 rounded-lg text-xs font-mono text-slate-300 border border-slate-800 overflow-x-auto leading-relaxed">
+const z = 1;
+if (true) {
+  const z = 2; // Isolated to block
+}
+// z = 7; -> TypeError
+// Mutation vs Reassignment:
+const obj = { color: "blue" };
+obj.color = "red"; // Allowed!</pre>
+
+                    <!-- Terminal Output Box -->
+                    <div class="mt-4">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Live Execution Log:</span>
+                        <div id="const-console" class="mt-1 bg-slate-950 border border-slate-800 rounded-lg p-3 font-mono text-xs space-y-1 min-h-[140px]">
+                            <span class="text-slate-600 italic">Ready to execute...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="run-const-btn" class="mt-4 w-full py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-600/40 font-medium rounded-lg transition">
+                    Run CONST Test
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        // Log output helpers
+        function printLine(targetId, label, value, type = "normal") {
+            const container = document.getElementById(targetId);
+            const line = document.createElement("div");
+            line.className = "flex justify-between items-center py-0.5 border-b border-slate-900 last:border-0";
+
+            let valueMarkup = `<span class="text-slate-200 font-semibold">${value}</span>`;
+            if (type === "warning") {
+                valueMarkup = `<span class="text-amber-400 font-semibold">${value}</span>`;
+            } else if (type === "error") {
+                valueMarkup = `<span class="text-rose-400 font-semibold">${value}</span>`;
+            } else if (type === "success") {
+                valueMarkup = `<span class="text-emerald-400 font-semibold">${value}</span>`;
+            }
+
+            line.innerHTML = `<span class="text-slate-400">${label}</span>${valueMarkup}`;
+            container.appendChild(line);
+        }
+
+        function clearLog(targetId) {
+            document.getElementById(targetId).innerHTML = "";
+        }
+
+        // ==========================================
+        // 1. VAR Execution
+        // ==========================================
+        function executeVar() {
+            clearLog("var-console");
+
+            var x = 1;
+            if (true) {
+                var x = 2; 
+                printLine("var-console", "Inside if(true) x:", x); // 2
+            }
+
+            if (false) {
+                var y = 3;
+            }
+            // Demonstrating the Hoisting silent bug:
+            printLine("var-console", "Access false-block y:", String(y), "warning"); // undefined
+
+            // Demonstrating the Scope Leak trap:
+            printLine("var-console", "Outside block x:", x + " (Overwritten!)", "error"); // 2
+
+            x = "test";
+            printLine("var-console", "Reassigned x to string:", `"${x}"`, "normal");
+        }
+
+        // ==========================================
+        // 2. LET Execution
+        // ==========================================
+        function executeLet() {
+            clearLog("let-console");
+
+            let y = 1;
+            if (true) {
+                let y = 2;
+                printLine("let-console", "Inside if(true) y:", y); // 2
+            }
+
+            if (false) {
+                let z = 3;
+            }
+
+            // Real caught exception demonstration:
+            try {
+                // Trying to access z which only existed in the block scope
+                eval("console.log(z)");
+            } catch (err) {
+                printLine("let-console", "Access false-block z:", err.name, "error"); // ReferenceError
+            }
+
+            // Preserved outer value demonstration:
+            printLine("let-console", "Outside block y:", y + " (Protected)", "success"); // 1
+
+            y = "test";
+            printLine("let-console", "Reassigned y to string:", `"${y}"`, "normal");
+        }
+
+        // ==========================================
+        // 3. CONST Execution
+        // ==========================================
+        function executeConst() {
+            clearLog("const-console");
+
+            const z = 1;
+            if (true) {
+                const z = 2;
+                printLine("const-console", "Inside if(true) z:", z); // 2
+            }
+            printLine("const-console", "Outside block z:", z + " (Protected)", "success"); // 1
+
+            // Real caught exception on reassignment:
+            try {
+                eval("z = 7");
+            } catch (err) {
+                printLine("const-console", "Reassigning z = 7:", err.name, "error"); // TypeError
+            }
+
+            // Demonstrating Object Mutation vs Reassignment (Critical for Web/DOM):
+            const btnConfig = { color: "blue" };
+            btnConfig.color = "red"; // Mutating property
+            printLine("const-console", "Mutated object property:", `"${btnConfig.color}"`, "success");
+        }
+
+        // Attach listeners
+        document.getElementById("run-var-btn").addEventListener("click", executeVar);
+        document.getElementById("run-let-btn").addEventListener("click", executeLet);
+        document.getElementById("run-const-btn").addEventListener("click", executeConst);
+
+        document.getElementById("run-all-btn").addEventListener("click", () => {
+            executeVar();
+            executeLet();
+            executeConst();
+        });
+    </script>
+</body>
+</html>
